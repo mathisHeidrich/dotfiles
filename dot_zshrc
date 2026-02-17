@@ -1,0 +1,46 @@
+export ZSH="$HOME/.oh-my-zsh"
+export PATH="$HOME/.rbenv/shims:$PATH"
+export PATH="/opt/flutter/bin:$PATH"
+export PATH="/opt/android-studio/bin:$PATH"
+export PATH="$HOME/.composer/vendor/bin:$PATH"
+export PATH="$HOME/.spicetify:$PATH"
+export PATH="$HOME/.jenv/bin:$PATH"
+export GCM_CREDENTIAL_STORE="gpg"
+export GPG_TTY=$(tty)
+eval "$(rbenv init - zsh)"
+eval "$(jenv init -)"
+eval "$(zoxide init zsh)"
+
+ZSH_THEME="dieter"
+HYPHEN_INSENSITIVE="true"
+DISABLE_AUTO_UPDATE="true"
+ENABLE_CORRECTION="true"
+DISABLE_UNTRACKED_FILES_DIRTY="true"
+plugins=(
+  git
+  autopep8
+  dotenv
+  emoji
+  z
+  pip
+  python
+  sudo
+  vundle
+  rbenv
+  virtualenv
+)
+
+source $ZSH/oh-my-zsh.sh
+
+alias ls="eza --header --long --time-style=long-iso --group-directories-first --git"
+alias cp="cp -r"
+alias vim="nvim"
+alias bluere="sudo launchctl stop com.apple.bluetoothd; sudo launchctl start com.apple.bluetoothd"
+alias cd="z"
+
+#disable auto correct
+unsetopt correct_all
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
