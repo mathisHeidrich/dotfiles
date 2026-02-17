@@ -37,6 +37,7 @@ alias cp="cp -r"
 alias vim="nvim"
 alias bluere="sudo launchctl stop com.apple.bluetoothd; sudo launchctl start com.apple.bluetoothd"
 alias cd="z"
+alias cz="chezmoi"
 
 #disable auto correct
 unsetopt correct_all
