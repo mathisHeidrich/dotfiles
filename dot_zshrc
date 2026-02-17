@@ -7,6 +7,8 @@ export PATH="$HOME/.spicetify:$PATH"
 export PATH="$HOME/.jenv/bin:$PATH"
 export GCM_CREDENTIAL_STORE="gpg"
 export GPG_TTY=$(tty)
+export EDITOR='nvim'
+export VISUAL='nvim'
 eval "$(rbenv init - zsh)"
 eval "$(jenv init -)"
 eval "$(zoxide init zsh)"
