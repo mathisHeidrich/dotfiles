@@ -1,0 +1,28 @@
+{{ if eq .chezmoi.os "linux" -}}
+#!/bin/bash
+
+if command -v pacman &> /dev/null; then
+    sudo pacman -S --needed --noconfirm neovim git nodejs npm python-pip unzip wget gcc ripgrep fd zoxide
+elif command -v apt-get &> /dev/null; then
+    sudo apt-get update
+    sudo apt-get install -y neovim git nodejs npm python3-pip unzip wget gcc ripgrep fd-find zoxide
+fi
+
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+
+FONT_DIR="$HOME/.local/share/fonts"
+if [ ! -d "$FONT_DIR/JetBrainsMono" ]; then
+    echo "Installing JetBrains Mono Nerd Font..."
+    mkdir -p "$FONT_DIR/JetBrainsMono"
+    wget https://github.com/ryanoasis/nerd-fonts/releases/latest/download/JetBrainsMono.zip -P /tmp
+    unzip /tmp/JetBrainsMono.zip -d "$FONT_DIR/JetBrainsMono"
+    fc-cache -fv
+fi
+
+if [ ! -d "$HOME/.config/nvim" ]; then
+    echo "Installing NvChad..."
+    git clone https://github.com/NvChad/starter ~/.config/nvim
+fi
+
+echo "Setup finished!"
+{{ end -}}
