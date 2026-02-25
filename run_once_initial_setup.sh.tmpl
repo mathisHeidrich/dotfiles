@@ -1,6 +1,10 @@
-{{ if eq .chezmoi.os "linux" -}}
+{{ if (or (eq .chezmoi.os "linux") (eq .chezmoi.os "darwin")) -}}
 #!/bin/bash
 
+# --- 1. System-Pakete installieren ---
+
+{{ if eq .chezmoi.os "linux" -}}
+# Linux (apt-get)
 if command -v apt-get &> /dev/null; then
     sudo apt-get update
     sudo apt-get install -y neovim git nodejs npm python3-pip unzip wget gcc ripgrep fd-find zoxide gpg
@@ -11,22 +15,43 @@ if command -v apt-get &> /dev/null; then
     sudo apt update
     sudo apt install -y eza
 fi
+{{ end -}}
 
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+{{ if eq .chezmoi.os "darwin" -}}
+# macOS (Homebrew)
+if command -v brew &> /dev/null; then
+    echo "Installing packages via Homebrew..."
+    brew install neovim git node eza ripgrep fd zoxide wget
+else
+    echo "⚠️ Homebrew nicht gefunden. Bitte installiere Homebrew zuerst: https://brew.sh"
+fi
+{{ end -}}
 
-FONT_DIR="$HOME/.local/share/fonts"
+# --- 2. Oh My Zsh installieren ---
+if [ ! -d "$HOME/.oh-my-zsh" ]; then
+    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+fi
+
+# --- 3. Fonts installieren ---
+FONT_DIR="{{ if eq .chezmoi.os "darwin" }}$HOME/Library/Fonts{{ else }}$HOME/.local/share/fonts{{ end }}"
 if [ ! -d "$FONT_DIR/JetBrainsMono" ]; then
     echo "Installing JetBrains Mono Nerd Font..."
     mkdir -p "$FONT_DIR/JetBrainsMono"
     wget https://github.com/ryanoasis/nerd-fonts/releases/latest/download/JetBrainsMono.zip -P /tmp
     unzip /tmp/JetBrainsMono.zip -d "$FONT_DIR/JetBrainsMono"
-    fc-cache -fv
+    {{ if eq .chezmoi.os "linux" }}fc-cache -fv{{ end }}
 fi
 
+# --- 4. NvChad installieren ---
 if [ ! -d "$HOME/.config/nvim" ]; then
     echo "Installing NvChad..."
     git clone https://github.com/NvChad/starter ~/.config/nvim
 fi
 
-echo "Setup finished!"
+echo "✅ Setup abgeschlossen!"
+{{ end -}}
+
+{{ if eq .chezmoi.os "windows" -}}
+# --- Windows-spezifisches Setup (PowerShell) ---
+Write-Host "✅ Windows Setup abgeschlossen!"
 {{ end -}}
