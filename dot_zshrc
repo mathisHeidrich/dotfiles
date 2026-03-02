@@ -13,6 +13,9 @@ eval "$(rbenv init - zsh)"
 eval "$(jenv init -)"
 eval "$(zoxide init zsh)"
 
+zstyle :omz:plugins:ssh-agent lazy yes
+zstyle :omz:plugins:ssh-agent helper yes
+
 ZSH_THEME="dieter"
 HYPHEN_INSENSITIVE="true"
 DISABLE_AUTO_UPDATE="true"
@@ -30,6 +33,7 @@ plugins=(
   vundle
   rbenv
   virtualenv
+  ssh-agent
 )
 
 source $ZSH/oh-my-zsh.sh
