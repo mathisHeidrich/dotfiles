@@ -7,7 +7,7 @@
 # Linux (apt-get)
 if command -v apt-get &> /dev/null; then
     sudo apt-get update
-    sudo apt-get install -y neovim git nodejs npm python3-pip unzip wget gcc ripgrep fd-find zoxide gpg
+    sudo apt-get install -y zsh neovim git nodejs npm python3-pip unzip wget gcc ripgrep fd-find zoxide gpg
     sudo mkdir -p /etc/apt/keyrings
     wget -qO- https://raw.githubusercontent.com/eza-community/eza/main/deb.asc | sudo gpg --dearmor -o /etc/apt/keyrings/gierens.gpg
     echo "deb [signed-by=/etc/apt/keyrings/gierens.gpg] http://deb.gierens.de stable main" | sudo tee /etc/apt/sources.list.d/gierens.list
@@ -30,6 +30,11 @@ fi
 # --- 2. Oh My Zsh installieren ---
 if [ ! -d "$HOME/.oh-my-zsh" ]; then
     sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+fi
+
+# --- 2.1 Zsh als Standard-Shell setzen ---
+if [ "$SHELL" != "$(which zsh)" ]; then
+    sudo chsh -s "$(which zsh)" "$USER"
 fi
 
 # --- 3. Fonts installieren ---
