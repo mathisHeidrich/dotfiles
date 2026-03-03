@@ -21,7 +21,11 @@ if [ ! -d "$HOME/.oh-my-zsh" ]; then
 fi
 
 if [ "$SHELL" != "$(which zsh)" ]; then
-    sudo chsh -s "$(which zsh)" "$USER"
+    ZSH_PATH="$(which zsh)"
+    if ! grep -qxF "$ZSH_PATH" /etc/shells; then
+        echo "$ZSH_PATH" | sudo tee -a /etc/shells
+    fi
+    sudo chsh -s "$ZSH_PATH" "$USER"
 fi
 
 FONT_DIR="{{ if eq .chezmoi.os "darwin" }}$HOME/Library/Fonts{{ else }}$HOME/.local/share/fonts{{ end }}"
