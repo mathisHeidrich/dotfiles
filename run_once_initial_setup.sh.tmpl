@@ -1,43 +1,29 @@
 {{ if (or (eq .chezmoi.os "linux") (eq .chezmoi.os "darwin")) -}}
 #!/bin/bash
 
-# --- 1. System-Pakete installieren ---
-
 {{ if eq .chezmoi.os "linux" -}}
-# Linux (apt-get)
-if command -v apt-get &> /dev/null; then
-    sudo apt-get update
-    sudo apt-get install -y zsh neovim git nodejs npm python3-pip unzip wget gcc ripgrep fd-find zoxide gpg
-    sudo mkdir -p /etc/apt/keyrings
-    wget -qO- https://raw.githubusercontent.com/eza-community/eza/main/deb.asc | sudo gpg --dearmor -o /etc/apt/keyrings/gierens.gpg
-    echo "deb [signed-by=/etc/apt/keyrings/gierens.gpg] http://deb.gierens.de stable main" | sudo tee /etc/apt/sources.list.d/gierens.list
-    sudo chmod 644 /etc/apt/keyrings/gierens.gpg /etc/apt/sources.list.d/gierens.list
-    sudo apt update
-    sudo apt install -y eza
-fi
+eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+{{ end -}}
+{{ if eq .chezmoi.os "darwin" -}}
+eval "$(/opt/homebrew/bin/brew shellenv)"
 {{ end -}}
 
-{{ if eq .chezmoi.os "darwin" -}}
-# macOS (Homebrew)
 if command -v brew &> /dev/null; then
     echo "Installing packages via Homebrew..."
-    brew install neovim git node eza ripgrep fd zoxide wget
+    brew install neovim git node eza ripgrep fd zoxide wget zsh python unzip gcc gnupg
 else
-    echo "⚠️ Homebrew nicht gefunden. Bitte installiere Homebrew zuerst: https://brew.sh"
+    echo "Homebrew not found. Run install.sh first."
+    exit 1
 fi
-{{ end -}}
 
-# --- 2. Oh My Zsh installieren ---
 if [ ! -d "$HOME/.oh-my-zsh" ]; then
     sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
 fi
 
-# --- 2.1 Zsh als Standard-Shell setzen ---
 if [ "$SHELL" != "$(which zsh)" ]; then
     sudo chsh -s "$(which zsh)" "$USER"
 fi
 
-# --- 3. Fonts installieren ---
 FONT_DIR="{{ if eq .chezmoi.os "darwin" }}$HOME/Library/Fonts{{ else }}$HOME/.local/share/fonts{{ end }}"
 if [ ! -d "$FONT_DIR/JetBrainsMono" ]; then
     echo "Installing JetBrains Mono Nerd Font..."
@@ -47,16 +33,14 @@ if [ ! -d "$FONT_DIR/JetBrainsMono" ]; then
     {{ if eq .chezmoi.os "linux" }}fc-cache -fv{{ end }}
 fi
 
-# --- 4. NvChad installieren ---
 if [ ! -d "$HOME/.config/nvim" ]; then
     echo "Installing NvChad..."
     git clone https://github.com/NvChad/starter ~/.config/nvim
 fi
 
-echo "✅ Setup abgeschlossen!"
+echo "Setup complete."
 {{ end -}}
 
 {{ if eq .chezmoi.os "windows" -}}
-# --- Windows-spezifisches Setup (PowerShell) ---
-Write-Host "✅ Windows Setup abgeschlossen!"
+Write-Host "Windows setup complete."
 {{ end -}}
