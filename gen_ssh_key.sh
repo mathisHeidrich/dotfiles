@@ -1,9 +1,13 @@
 #!/bin/bash
 
 KEY_PATH="$HOME/.ssh/id_ed25519"
-COMMENT="mathis.heidrich@$(hostname)"
 
 echo "SSH Key Generator"
+
+DEFAULT_COMMENT="mathis.heidrich@$(hostname)"
+read -r -p "Enter a comment for this key [$DEFAULT_COMMENT]: " USER_INPUT
+
+COMMENT=${USER_INPUT:-$DEFAULT_COMMENT}
 
 if [ -f "$KEY_PATH" ]; then
     echo "Warning: a key already exists at $KEY_PATH"
