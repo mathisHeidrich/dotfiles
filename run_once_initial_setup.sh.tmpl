@@ -11,6 +11,7 @@ eval "$(/opt/homebrew/bin/brew shellenv)"
 if command -v brew &> /dev/null; then
     echo "Installing packages via Homebrew..."
     brew install neovim git node eza ripgrep fd zoxide wget zsh python unzip gcc gnupg
+    brew install --cask font-jetbrains-mono-nerd-font
 else
     echo "Homebrew not found. Run install.sh first."
     exit 1
@@ -26,15 +27,6 @@ if [ "$SHELL" != "$(which zsh)" ]; then
         echo "$ZSH_PATH" | sudo tee -a /etc/shells
     fi
     sudo chsh -s "$ZSH_PATH" "$USER"
-fi
-
-FONT_DIR="{{ if eq .chezmoi.os "darwin" }}$HOME/Library/Fonts{{ else }}$HOME/.local/share/fonts{{ end }}"
-if [ ! -d "$FONT_DIR/JetBrainsMono" ]; then
-    echo "Installing JetBrains Mono Nerd Font..."
-    mkdir -p "$FONT_DIR/JetBrainsMono"
-    wget https://github.com/ryanoasis/nerd-fonts/releases/latest/download/JetBrainsMono.zip -P /tmp
-    unzip /tmp/JetBrainsMono.zip -d "$FONT_DIR/JetBrainsMono"
-    {{ if eq .chezmoi.os "linux" }}fc-cache -fv{{ end }}
 fi
 
 if [ ! -d "$HOME/.config/nvim" ]; then
