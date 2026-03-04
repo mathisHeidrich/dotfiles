@@ -28,4 +28,4 @@ else
 fi
 
 echo "Homebrew and chezmoi are installed."
-echo "Run: chezmoi init --apply <your-github-username>"
+echo "Run: chezmoi init --apply mathisHeidrich/dotfiles"
