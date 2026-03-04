@@ -49,7 +49,7 @@ plugins=(
 
 source $ZSH/oh-my-zsh.sh
 
-alias ls="eza --header --long --time-style=long-iso --group-directories-first --git"
+alias ls="eza --header --long --time-style=long-iso --group-directories-first --git --icons"
 alias cp="cp -r"
 alias vim="nvim"
 alias bluere="sudo launchctl stop com.apple.bluetoothd; sudo launchctl start com.apple.bluetoothd"
